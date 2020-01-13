@@ -10,12 +10,12 @@ import org.json.simple.parser.ParseException;
 
 public class PostController {
 
-    public static String getPosts() {
+    public static JSONArray getPosts() {
         JSONParser jsonParser = new JSONParser();
         try (FileReader reader = new FileReader("assets/data.json")) {
             Object obj = jsonParser.parse(reader);
             JSONArray data = (JSONArray) obj;
-            return data.toJSONString();
+            return data;
 
         } catch (FileNotFoundException ex) {
             ex.printStackTrace();
@@ -25,7 +25,7 @@ public class PostController {
             ex.printStackTrace();
         }
 
-        return "";
+        return null;
     }
 
 }

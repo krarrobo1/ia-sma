@@ -23,8 +23,12 @@ public class MainBoot {
 		try {
 			p = new ProfileImpl(MAIN_PROPERTIES_FILE);
 			AgentContainer mc = rt.createMainContainer(p);
+               
 			AgentController ac = mc.createNewAgent("Reception", "ia.agent.ReceptAgent", null);
+                        AgentController fb = mc.createNewAgent("FbAgent", "ia.agent.FbAgent", null);
+                        
 			ac.start();
+                        fb.start();
 		}
 		catch (Exception ex) {
 			ex.printStackTrace();
