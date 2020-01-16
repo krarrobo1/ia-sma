@@ -4,7 +4,6 @@
  * and open the template in the editor.
  */
 package ia.agent;
-import ia.controller.PostController;
 import jade.core.ProfileImpl;
 import jade.core.Runtime;
 import jade.wrapper.AgentContainer;

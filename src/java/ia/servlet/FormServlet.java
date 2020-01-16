@@ -99,8 +99,10 @@ public class FormServlet extends HttpServlet {
 
         try {
             JadeGateway.execute(behaviour);
+            request.setAttribute("fb-response", behaviour.getAnswer());
+            request.getRequestDispatcher("result.jsp").forward(request, response);
 
-            PrintWriter out = response.getWriter();
+            /*PrintWriter out = response.getWriter();
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
@@ -112,11 +114,15 @@ public class FormServlet extends HttpServlet {
                     + "th, td {\n"
                     + "  padding: 5px;\n"
                     + "  text-align: left;\n"
-                    + "}\n"
+                    + "}\n"+
+                    "body{"
+                    + "font-family: Verdana, Geneva, sans-serif;"
+                    + "}"
                     + "</style>");
             out.println("<title>Servlet SearchServlet</title>");
             out.println("</head>");
             out.println("<body>");
+            out.println("<h1> Resultado de la búsqueda </h1>");
 
             //out.println("<h1>Servlet SearchServlet at " + behaviour.getAnswer() + "</h1>");
             JSONArray jsonArr = behaviour.getAnswer();
@@ -148,24 +154,25 @@ public class FormServlet extends HttpServlet {
                     String id = (String) obj.get("id");
                     String msj = (String) obj.get("message");
                     out.println("<tr>");
-                    out.println("<td>" + id + "<td>");
-                    out.println("<td>" + msj + "<td>");
+                    out.println("<td>" + id + "</td>");
+                    out.println("<td>" + msj + "</td>");
                     out.println("</tr>");
                    
 
                 }
+                out.println("<br>");
                 out.println("<table>");
             }
+            
+            out.println("<h1><a href='http://localhost:8080/FbSma/index.html'>Volver al Buscador</a><h1>");
 
             out.println("</body>");
             out.println("</html>");
 
             /*RequestDispatcher rd = request.getRequestDispatcher("newjsp.jsp");
            rd.forward(request, response);*/
-        } catch (ControllerException ex) {
-            Logger.getLogger(FormServlet.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (InterruptedException ex) {
-            Logger.getLogger(FormServlet.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ControllerException | InterruptedException ex) {
+            System.out.println(ex.getMessage());
         }
 
     }

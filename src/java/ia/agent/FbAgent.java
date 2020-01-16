@@ -9,10 +9,8 @@ import jade.core.Agent;
 import jade.core.behaviours.CyclicBehaviour;
 import jade.lang.acl.ACLMessage;
 import ia.controller.PostController;
-import jade.core.behaviours.Behaviour;
 import jade.lang.acl.MessageTemplate;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -60,27 +58,16 @@ public class FbAgent extends Agent {
                 System.out.println("SAVED" + saved.toJSONString());
                 
                 ACLMessage reply = msg.createReply();
-                
-                
-                if(saved.size() > 0){
-                    reply.setPerformative(ACLMessage.PROPOSE);
-                    try {
-                        reply.setContentObject(saved);
-                    } catch (IOException ex) {
-                        ex.printStackTrace();
-                    }
-                }else{
-                    reply.setPerformative(ACLMessage.REFUSE);
-                    reply.setContent("no-disponible");
+                reply.setPerformative(ACLMessage.PROPOSE);
+                try {
+                    reply.setContentObject(saved);
+                    myAgent.send(reply);
+                    System.out.println("enviando respuesta...");
+                } catch (IOException ex) {
+                    System.out.println(ex.getMessage());
                 }
-               
                 
                 
-                
-                myAgent.send(reply);
-                System.out.println("enviando respuesta...");
-                
-                //super.reset();
                 
                 // Enviar info al PARSER BOT y retornar a la web
             } else {

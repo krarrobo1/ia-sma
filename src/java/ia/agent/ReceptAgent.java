@@ -6,7 +6,6 @@
 package ia.agent;
 
 import jade.core.Agent;
-import jade.core.behaviours.Behaviour;
 
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
@@ -17,8 +16,7 @@ import jade.core.AID;
 import jade.core.behaviours.CyclicBehaviour;
 import jade.lang.acl.UnreadableException;
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
 
 public class ReceptAgent extends Agent {
 
@@ -38,7 +36,6 @@ public class ReceptAgent extends Agent {
 
         @Override
         public void action() {
-
             switch (step) {
                 case 0:
                     MessageTemplate mt = MessageTemplate.MatchPerformative(ACLMessage.INFORM);
@@ -57,9 +54,8 @@ public class ReceptAgent extends Agent {
                         msg.setReplyWith("cfp" + System.currentTimeMillis());
                         myAgent.send(msg);
 
-                        mtemp = MessageTemplate.and(MessageTemplate.MatchConversationId("fb-consult"), MessageTemplate.MatchInReplyTo(msg.getReplyWith()));
-                        step++;
-
+                       
+                        step = 1;
                     } else {
                         block();
                     }
@@ -67,41 +63,31 @@ public class ReceptAgent extends Agent {
                     break;
 
                 case 1:
+                     mtemp = MessageTemplate.MatchPerformative(ACLMessage.PROPOSE);
                     ACLMessage fbmsg = myAgent.receive(mtemp);
+                   
+                    ACLMessage reply = message.createReply();
+
                     if (fbmsg != null) {
                         try {
                             System.out.println("Recibiendo respuesta de FBBOTs");
-                            JSONArray json = (JSONArray) fbmsg.getContentObject();
-                            
-                            System.out.println(json.toJSONString());
-
-                            ACLMessage reply = message.createReply();
                             reply.setContentObject(fbmsg.getContentObject());
-
                             myAgent.send(reply);
-                            
                             step++;
                             
-                        
-
-                        } catch (UnreadableException ex) {
-                            ex.printStackTrace();
-                        } catch (IOException ex) {
-                            ex.printStackTrace();
+                        } catch (UnreadableException | IOException ex) {
+                            System.out.println(ex.getMessage());
                         }
                     } else {
                         block();
                     }
                     
                     break;
+                    
+                case 2:
+                    step = 0;
+                    break;
             }
-
         }
-
-        /*@Override
-        public boolean done() {
-            return false;
-        }*/
     }
-
 }
