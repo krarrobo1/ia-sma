@@ -1,0 +1,49 @@
+<div class="container mt-5">
+  <h1>👌 Resultados de búsqueda!</h1>
+  <p class="lead"><b>Buscaste: </b>"{{ keywords }}"</p>
+  <p class="lead"><b>Contador: </b> {{ results.length }} resultados encontrados</p>
+
+  <div class="card-columns mb-4">
+    <ng-container *ngFor="let res of results; let index = index">
+      <!-- CARD POST -->
+      <div class="card p-3" *ngIf="res.kind === 'FACEBOOK#POST'">
+        <blockquote class="blockquote mb-0 card-body">
+          <p>{{ res.message }}</p>
+          <footer class="blockquote-footer">
+            <small class="text-muted">
+              Autor <cite title="Source Title">{{ res.author }}</cite>
+            </small>
+          </footer>
+        </blockquote>
+      </div>
+
+      <!-- CARD NEWS -->
+      <div class="card text-center" *ngIf="res.kind === 'FACEBOOK#NEW'">
+        <div class="card-body">
+          <h5 class="card-title">{{ res.title }}</h5>
+          <p class="card-text">
+            {{ res.message }}
+          </p>
+          <p class="card-text">
+            <small class="text-muted">Fecha: {{ res.created_time | date }}</small>
+          </p>
+        </div>
+      </div>
+      <!-- CARD PUBLICITY -->
+      <div
+        class="card  text-white text-center p-3"
+        *ngIf="res.kind === 'FACEBOOK#PUBLICITY'"
+        [ngClass]="{ 'bg-primary': !!(index % 2), 'bg-success': !(index % 2) }"
+      >
+        <blockquote class="blockquote mb-0">
+          <p>{{ res.message }}</p>
+          <footer class="blockquote-footer text-white">
+            <small
+              ><cite title="Source Title">{{ res.author }}</cite>
+            </small>
+          </footer>
+        </blockquote>
+      </div>
+    </ng-container>
+  </div>
+</div>

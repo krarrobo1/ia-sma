@@ -38,25 +38,29 @@ public class FbAgent extends Agent {
             if (msg != null) {
                 System.out.println("Recibido: " + msg);
                 String raw = msg.getContent();
-                String[] keyWords = raw.split(",");
+                String[] keyWords = raw.split(";");
                 JSONArray results = PostController.getPosts();
                 JSONArray saved = new JSONArray();
                 Iterator it = results.iterator();
+
                 while (it.hasNext()) {
-                    Object temp = it.next();
-                    JSONObject objTemp = (JSONObject) temp;
-                    String topic = (String) objTemp.get("page");
-                    
+                    Object rawObject = it.next();
+                    JSONObject object = (JSONObject) rawObject;
+
+                    JSONArray tags = (JSONArray) object.get("tags");
+                    Object[] topics = (Object[]) tags.toArray();
+
                     for (int i = 0; i < keyWords.length; i++) {
-                        if (topic.equals(keyWords[i])) {
-                            saved.add(objTemp);
-                            break;
+                        for (int j = 0; j < topics.length; j++) {
+                            if (keyWords[i].equals(String.valueOf(topics[j]))) {
+                                saved.add(object);
+                            }
                         }
                     }
-                    
+
                 }
                 System.out.println("SAVED" + saved.toJSONString());
-                
+
                 ACLMessage reply = msg.createReply();
                 reply.setPerformative(ACLMessage.PROPOSE);
                 try {
@@ -66,9 +70,7 @@ public class FbAgent extends Agent {
                 } catch (IOException ex) {
                     System.out.println(ex.getMessage());
                 }
-                
-                
-                
+
                 // Enviar info al PARSER BOT y retornar a la web
             } else {
                 block();
@@ -76,9 +78,8 @@ public class FbAgent extends Agent {
         }
 
         /*@Override
-        public boolean done() {
-            return false;
-        }*/
-
+         public boolean done() {
+         return false;
+         }*/
     }
 }
