@@ -46,4 +46,23 @@
       </div>
     </ng-container>
   </div>
+  
+  <div class="mb-5">
+    <div class="row">
+      <div class="col-6">
+        <a
+          [routerLink]="['/search']"
+          class="btn btn-outline-primary btn-block"
+          [queryParams]="{ q: mergeKeywords }"
+        >
+          Editar búsqueda 👈
+        </a>
+      </div>
+      <div class="col-6">
+        <a class="btn btn-primary btn-block" [routerLink]="['/search']" role="button">
+          Realizar Nueva Búsqueda 🔍
+        </a>
+      </div>
+    </div>
+  </div>
 </div>
